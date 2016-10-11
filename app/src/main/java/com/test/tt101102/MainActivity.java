@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,11 +14,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-
+    TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tv = (TextView) findViewById(R.id.textView);
 
         new Thread(){
             @Override
@@ -39,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String str = result.toString("UTF-8");
                     Log.d("NET", str);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv.setText("Finish");
+                        }
+                    });
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
