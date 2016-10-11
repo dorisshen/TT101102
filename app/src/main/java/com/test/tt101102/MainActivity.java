@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         dataHandler = new MyDataHandler();
         //tv = (TextView) findViewById(R.id.textView);
         lv = (ListView) findViewById(R.id.listView);
-
+        //網路連線需要另外獨立一個Thread
         new Thread(){
             @Override
             public void run() {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     XMLReader xr = sp.getXMLReader();
                     xr.setContentHandler(dataHandler);
                     xr.parse(new InputSource(new StringReader(str)));
-
+                    //UI上資料的變動要到回到UI上的Thread上異動;將UDN之RSS取得的資料(網路取得資源)，呈現在ListView上
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
