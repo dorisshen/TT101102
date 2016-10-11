@@ -1,9 +1,14 @@
 package com.test.tt101102;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.xml.sax.InputSource;
@@ -17,20 +22,25 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 public class MainActivity extends AppCompatActivity {
-    TextView tv;
+
     MyDataHandler dataHandler;
+    //TextView tv;
+    ListView lv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dataHandler = new MyDataHandler();
-        tv = (TextView) findViewById(R.id.textView);
+        //tv = (TextView) findViewById(R.id.textView);
+        lv = (ListView) findViewById(R.id.listView);
 
         new Thread(){
             @Override
@@ -62,7 +72,21 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tv.setText("Finish");
+                            //tv.setText("Finish");
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                    MainActivity.this,
+                                    android.R.layout.simple_list_item_1,
+                                    dataHandler.xmlData
+                            );
+                            lv.setAdapter(adapter);
+                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent it = new Intent(MainActivity.this, DetailActivity.class);
+                                    it.putExtra("link", dataHandler.XMLLink.get(position));
+                                    startActivity(it);
+                                }
+                            });
                         }
                     });
 

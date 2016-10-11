@@ -6,6 +6,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.util.ArrayList;
+
 /**
  * Created by teacher on 2016/10/11.
  */
@@ -13,6 +15,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class MyDataHandler extends DefaultHandler {
     boolean isTitle = false;
     boolean isItem = false;
+    boolean isLink = false;
+    ArrayList<String> xmlData = new ArrayList<>();
+    ArrayList<String> XMLLink = new ArrayList<>();
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
@@ -23,6 +28,10 @@ public class MyDataHandler extends DefaultHandler {
         if (qName.equals("item"))
         {
             isItem = true;
+        }
+        if (qName.equals("link"))
+        {
+            isLink = true;
         }
     }
 
@@ -37,6 +46,10 @@ public class MyDataHandler extends DefaultHandler {
         {
             isItem = false;
         }
+        if (qName.equals("link"))
+        {
+            isLink = false;
+        }
     }
 
     @Override
@@ -45,7 +58,14 @@ public class MyDataHandler extends DefaultHandler {
         if (isTitle == true && isItem == true)
         {
             String fetchStr = new String(ch).substring(start, start + length);
+            xmlData.add(fetchStr);
+
             Log.d("TITLE", fetchStr);
+        }
+        if (isLink == true && isItem == true)
+        {
+            String fetchStr = new String(ch).substring(start, start + length);
+            XMLLink.add(fetchStr);
         }
     }
 }
